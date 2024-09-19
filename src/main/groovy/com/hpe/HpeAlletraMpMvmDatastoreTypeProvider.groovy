@@ -79,6 +79,10 @@ class HpeAlletraMpMvmDatastoreTypeProvider implements DatastoreTypeProvider, Dat
 			if(result.isSuccess()) {
 				//get data from stdout
 				String stdout = result.getOutput()
+				//storageVolume.externalId == //maybe put externalId from virsh in here which may just be the vol name
+				//storageVolume.externalPath == // i.e. /dev/sdj
+				//storageVolume.internalId == // i.e. maybe burn the UUID or unique identifier within the alletra itself here
+				return ServiceResponse.success(storageVolume)
 			} else {
 				//handle failure
 			}
