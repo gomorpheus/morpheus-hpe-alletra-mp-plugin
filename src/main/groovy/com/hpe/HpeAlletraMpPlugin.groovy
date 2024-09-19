@@ -29,7 +29,7 @@ class HpeAlletraMpPlugin extends Plugin {
         this.setName("HPE Alletra MP")
         this.registerProvider(new HpeAlletraMpStorageProvider(this,this.morpheus))
         this.registerProvider(new HpeAlletraMpMvmDatastoreTypeProvider(this,this.morpheus))
-        
+        this.registerProvider(new AlletraStorageServerDataSetProvider(this,this.morpheus))
 		
     }
 

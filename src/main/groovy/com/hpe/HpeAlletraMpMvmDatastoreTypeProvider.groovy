@@ -36,7 +36,21 @@ class HpeAlletraMpMvmDatastoreTypeProvider implements DatastoreTypeProvider, Dat
 
 	@Override
 	List<OptionType> getOptionTypes() {
-		return [] //TODO: implement
+		return [
+						new OptionType(
+										name: 'Storage Server',
+										code: 'alletra-mp-datastore-storage-server',
+										displayOrder: 0,
+										fieldContext: 'domain',
+										fieldLabel: 'Storage Server',
+										fieldCode: 'gomorpheus.label.storageServer',
+										fieldName: 'storageServer',
+										inputType: OptionType.InputType.SELECT,
+										required: true,
+										optionSource:'alletra-mp.alletra-storage-servers',
+										defaultValue: 'off'
+						)
+		] //TODO: implement
 	}
 
 	@Override
