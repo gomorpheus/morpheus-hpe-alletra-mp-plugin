@@ -206,7 +206,7 @@ class HpeAlletraMpStorageProvider implements StorageProvider, StorageProviderVol
 	@Override
 	Collection<StorageVolumeType> getStorageVolumeTypes() {
 		return [
-						new StorageVolumeType(code:'alletrampObject', displayName:'HPE Alletra MP Object Storage', name:'HPE Alletra MP Object Storage', description:'HPE Alletra MP Object Storage', volumeType:'bucket', enabled:false, displayOrder:1, customLabel:true, customSize:true, defaultType:true, autoDelete:true, minStorage:ComputeUtility.ONE_GIGABYTE, maxStorage:(10L * ComputeUtility.ONE_TERABYTE), allowSearch:true, volumeCategory:'volume')
+						new StorageVolumeType(code:'alletraMPLUN', displayName:'HPE Alletra MP LUN', name:'HPE Alletra MP LUN', description:'HPE Alletra MP LUN', volumeType:'block', enabled:false, displayOrder:1, customLabel:true, customSize:true, defaultType:true, autoDelete:true, allowSearch:true, volumeCategory:'volume')
 		]
 	}
 }
