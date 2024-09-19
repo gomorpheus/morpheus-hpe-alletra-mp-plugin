@@ -9,6 +9,7 @@ import com.morpheusdata.model.ComputeServerGroup
 import com.morpheusdata.model.Datastore
 import com.morpheusdata.model.OptionType
 import com.morpheusdata.model.Snapshot
+import com.morpheusdata.model.StorageServer
 import com.morpheusdata.model.StorageVolume
 import com.morpheusdata.model.TaskResult
 import com.morpheusdata.model.VirtualImage
@@ -85,6 +86,14 @@ class HpeAlletraMpMvmDatastoreTypeProvider implements DatastoreTypeProvider, Dat
 		ComputeServer hypervisorHost = computeServer.parentServer
 		//lets load the full datastore object since the default parent is just a projection
 		Datastore currentDatastore = morpheusContext.services.cloud.datastore.get(storageVolume.datastore.id)
+		StorageServer storageServer = currentDatastore.storageServer
+
+		//if using standard fields
+		String endpoint = storageServer.serviceUrl
+		String username = storageServer.serviceUsername
+		String password = storageServer.servicePassword
+
+		
 		try {
 			//apiClient.callJsonApi("/api/v1/storage-volumes", "POST", storageVolume, StorageVolume)
 			//execute operations on the hypervisor with:
