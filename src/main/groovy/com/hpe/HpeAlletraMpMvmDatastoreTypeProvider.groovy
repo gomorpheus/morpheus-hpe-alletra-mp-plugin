@@ -2,6 +2,7 @@ package com.hpe
 
 import com.morpheusdata.core.MorpheusContext
 import com.morpheusdata.core.Plugin
+import com.morpheusdata.core.data.DataQuery
 import com.morpheusdata.core.providers.DatastoreTypeProvider
 import com.morpheusdata.core.util.HttpApiClient
 import com.morpheusdata.model.ComputeServer
@@ -14,7 +15,9 @@ import com.morpheusdata.model.StorageVolume
 import com.morpheusdata.model.TaskResult
 import com.morpheusdata.model.VirtualImage
 import com.morpheusdata.response.ServiceResponse
+import groovy.util.logging.Slf4j
 
+@Slf4j
 class HpeAlletraMpMvmDatastoreTypeProvider implements DatastoreTypeProvider, DatastoreTypeProvider.MvmProvisionFacet, DatastoreTypeProvider.SnapshotFacet.SnapshotServerFacet {
 
 	protected MorpheusContext morpheusContext
@@ -45,7 +48,7 @@ class HpeAlletraMpMvmDatastoreTypeProvider implements DatastoreTypeProvider, Dat
 										fieldContext: 'domain',
 										fieldLabel: 'Storage Server',
 										fieldCode: 'gomorpheus.label.storageServer',
-										fieldName: 'storageServer',
+										fieldName: 'storageServer.id',
 										inputType: OptionType.InputType.SELECT,
 										required: true,
 										optionSource:'alletra-mp.alletra-storage-servers',
@@ -93,7 +96,7 @@ class HpeAlletraMpMvmDatastoreTypeProvider implements DatastoreTypeProvider, Dat
 		String username = storageServer.serviceUsername
 		String password = storageServer.servicePassword
 
-		
+
 		try {
 			//apiClient.callJsonApi("/api/v1/storage-volumes", "POST", storageVolume, StorageVolume)
 			//execute operations on the hypervisor with:
@@ -154,12 +157,19 @@ class HpeAlletraMpMvmDatastoreTypeProvider implements DatastoreTypeProvider, Dat
 
 	@Override
 	ServiceResponse<Datastore> createDatastore(Datastore datastore) {
-		return null
+		log.info("Receiving Datastore Record: ${datastore.dump()} - ${datastore.storageServer}")
+		morpheusContext.services.computeServer.list(new DataQuery().withFilter("serverGroup.id", datastore.refId)).each { ComputeServer computeServer ->
+			log.info("Found Compute Server: ${computeServer.name}")
+
+			def resp = morpheusContext.executeCommandOnServer(computeServer, "echo hello").blockingGet()
+			log.info("Server Response: ${resp.getData()}")
+		}
+		return ServiceResponse.success(datastore)
 	}
 
 	@Override
 	ServiceResponse removeDatastore(Datastore datastore) {
-		return null
+		return ServiceResponse.success()
 	}
 
 	@Override
@@ -203,7 +213,13 @@ class HpeAlletraMpMvmDatastoreTypeProvider implements DatastoreTypeProvider, Dat
 	}
 
 	@Override
-	ServiceResponse<Snapshot> revertSnapshot(ComputeServer computeServer) {
+	ServiceResponse<Snapshot> revertSnapshot(ComputeServer computeServer, Snapshot snapshot) {
 		return null
 	}
+
+	@Override
+	ServiceResponse removeSnapshot(ComputeServer computeServer, Snapshot snapshot) {
+		return null
+	}
+
 }
